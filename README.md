@@ -23,3 +23,13 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poet
 poetry shell
 poetry install
 ```
+
+Run the server locally
+
+```python
+python manage.py migrate
+python manage.py collectstatic
+python manage.py createsuperuser
+python manage.py runserver
+```
+

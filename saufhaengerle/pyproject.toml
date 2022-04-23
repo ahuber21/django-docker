@@ -18,3 +18,16 @@ black = "^22.3.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+skip-magic-trailing-comma = "True"
+target-version = ['py310']
+extend-exclude = '''
+/(
+  # The following are specific to Black, you probably don't want those.
+  | migrations
+  | productfeed/config
+  | filehandler/config
+)/
+'''
