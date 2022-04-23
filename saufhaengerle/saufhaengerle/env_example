@@ -1,0 +1,5 @@
+# name this file .env in saufhaengerle for local dev
+# name this file env_prod to copy it to the container when building the image
+DEBUG=on
+SECRET_KEY=your-secret-key-replace-for-prod
+DATABASE_URL=psql://localhost/saufhaengerle

@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "saufhaengerle-django-app"
+version = "0.1.0"
+description = "The Saufhaengerle Django Project"
+authors = ["Andreas Huber <andreas.hoenle@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.0.4"
+django-unicorn = "^0.45.0"
+django-environ = "^0.8.1"
+psycopg2-binary = "^2.9.3"
+gunicorn = "^20.1.0"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
