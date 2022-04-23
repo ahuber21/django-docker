@@ -1,9 +1,16 @@
 from django.db import models
 
 
+class Topic(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
 class Message(models.Model):
     created_at = models.DateTimeField(auto_now=True)
-    topic = models.CharField(max_length=50, db_index=True)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, db_index=True)
     payload = models.CharField(max_length=2000)
 
     def __str__(self):
