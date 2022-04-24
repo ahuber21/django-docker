@@ -1,15 +1,15 @@
 version: '3.8'
 
 services:
-  web:
-    build: ./saufhaengerle
-    command: python manage.py runserver 0.0.0.0:8000
-    ports:
-      - 8000:8000
-    volumes:
-      - ./saufhaengerle:/home/app/web/
-    env_file:
-      - ./saufhaengerle/.env
+  # web:
+  #   build: ./saufhaengerle
+  #   command: python manage.py runserver 0.0.0.0:8000
+  #   ports:
+  #     - 8000:8000
+  #   volumes:
+  #     - ./saufhaengerle:/home/app/web/
+  #   env_file:
+  #     - ./saufhaengerle/.env
 
   mosquitto:
     image: eclipse-mosquitto:2.0.14

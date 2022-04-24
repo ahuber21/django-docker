@@ -1,0 +1,19 @@
+<div>
+    <input unicorn:model="name" type="text" id="text" /><br />
+
+    <select unicorn:model="finger">
+        {% for f in finger_options %}
+        <option value="{{ f }}">{{ f }}</option>
+        {% endfor %}
+    </select><br />
+
+
+    <button unicorn:click="enroll" type="button">GO</button> <br />
+
+    <h3>Output</h3>
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>

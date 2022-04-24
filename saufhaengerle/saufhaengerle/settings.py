@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
+from typing import Any
 
 import environ
 
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_unicorn",
     "admin_auto_filters",
     "fingerprints",
     "mqtt",
@@ -146,5 +148,10 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {"console": {"class": "logging.StreamHandler"}},
     "root": {"handlers": ["console"], "level": "WARNING"},
-    "loggers": {"mqtt-api": {"handlers": ["console"], "level": "DEBUG"}},
+    "loggers": {
+        "mqtt-api": {"handlers": ["console"], "level": "DEBUG"},
+        "fingerprints": {"handlers": ["console"], "level": "DEBUG"},
+    },
 }
+
+MQTT: dict[str, Any] = {"host": env("MQTT_HOST"), "port": int(env("MQTT_PORT"))}
