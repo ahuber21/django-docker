@@ -10,8 +10,6 @@ services:
       - ./saufhaengerle:/home/app/web/
     env_file:
       - ./saufhaengerle/.env
-    depends_on:
-      - db
 
   mosquitto:
     image: eclipse-mosquitto:2.0.14
