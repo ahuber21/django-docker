@@ -23,8 +23,6 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
     poetry config virtualenvs.create false && \
     poetry install
 
-COPY . .
-
 RUN chown -R app:app $APP_HOME
 
 USER app
