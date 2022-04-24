@@ -1,3 +1,4 @@
+from datetime import datetime
 from logging import getLogger
 from typing import Optional
 
@@ -16,13 +17,14 @@ log = getLogger("fingerprints")
 class EnrollView(UnicornView):
     finger_options = [str(o[1]) for o in FingerTypes.choices]  # static
     users: QuerySetType[User] = User.objects.none()
-    last_update = now()
+    last_update: datetime
     finger: Optional[str] = None
     owner_username: Optional[str] = None
     messages: Optional[list[str]] = None
 
     def mount(self) -> None:
         self.users = User.objects.all()
+        self.last_update = now()
 
     def enroll(self) -> None:
         if self.messages is None:
@@ -52,11 +54,10 @@ class EnrollView(UnicornView):
         mqtt.send_message("fingerprint_in", "ENROLL")
 
     def get_messages(self) -> None:
-        # TODO: Sort the new messages by created_at
         topics = Topic.objects.filter(name__in=(MQTT["topics"]["FINGERPRINT_DEBUG"], MQTT["topics"]["FINGERPRINT_OUT"]))
         new_mqtt_messages = [
             f"[{m.created_at.strftime('%H:%M:%S')}] {m.payload}"
-            for m in Message.objects.filter(topic__in=topics, created_at__gte=self.last_update)
+            for m in Message.objects.filter(topic__in=topics, created_at__gte=self.last_update).order_by("created_at")
         ]
         if self.messages:
             self.messages += new_mqtt_messages
