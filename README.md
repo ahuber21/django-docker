@@ -49,3 +49,9 @@ Run the production docker environment
 ```bash
 docker-compose -f docker-compose.prod.yml up -d --build # --build only required after changes
 ```
+
+
+## First steps
+
+* Navigate to http://localhost:8000/admin (development) / http://localhost:1337/admin (production) and make sure you can access the admin panel with the credentials you entered using `createsuperuser`
+* Navigate to http://localhost:8000/fingerprints/enroll/ to add a new fingerprint
