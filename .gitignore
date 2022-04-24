@@ -1,7 +1,6 @@
 __pycache__
 *.pyc
 .vscode
-.env
-env_prod
+.env*
 staticfiles
 db.sqlite3

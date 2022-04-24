@@ -1,5 +1,10 @@
 # Django Saufhängerle
 
+Here is an excellent guide how to Dockerize Django
+
+https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
+
+
 ## development
 
 Development happens outside of Docker and is using a PostgreSQL database hosted on the your PC/Mac.
