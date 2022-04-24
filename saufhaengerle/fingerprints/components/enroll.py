@@ -15,7 +15,7 @@ log = getLogger("fingerprints")
 
 
 class EnrollView(UnicornView):
-    finger_options = [str(o[1]) for o in FingerTypes.choices]  # static
+    finger_options = FingerTypes.choices
     users: QuerySetType[User] = User.objects.none()
     last_update: datetime
     finger: Optional[str] = None

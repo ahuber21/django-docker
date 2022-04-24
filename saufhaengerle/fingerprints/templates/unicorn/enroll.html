@@ -7,7 +7,7 @@
 
     <select unicorn:model="finger" unicorn:change="reset_messages">
         {% for f in finger_options %}
-        <option value="{{ f }}">{{ f }}</option>
+        <option value="{{ f.0 }}">{{ f.1 }}</option>
         {% endfor %}
     </select>
 
