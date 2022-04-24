@@ -4,20 +4,16 @@ Here is an excellent guide how to Dockerize Django
 
 https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
 
+## dev + prod environments
+
+The development environment is defined by the files: docker-compose.yml, Dockerfile, .env), etc.
+The production envioronment is setup with the corresponding files with .prod in their names.
 
 ## development
 
-Development happens outside of Docker and is using a PostgreSQL database hosted on the your PC/Mac.
-The setup is written of macOS with homebrew.
+Development can be done locally (on the host machine) or in the dev Docker environment.
+Some services like the Node-RED to Django communication are only available when running in Docker.
 
-
-Install PostgreSQL and create the DB
-
-```bash
-brew install postgresql  # tested with 14.2_1
-brew services start postgresql
-createdb saufhaengerle
-```
 
 Install Python 3.10 and install the virtual environment with poetry
 
@@ -41,6 +37,13 @@ python manage.py runserver
 Run the server in the development docker container
 
 ```bash
-docker compose up -d
+docker compose up -d --build # --build only required after changes
+# create a superuser - only required once
 docker-compose exec web python manage.py createsuperuser
+```
+
+Run the production docker environment
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build # --build only required after changes
 ```
