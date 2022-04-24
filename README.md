@@ -38,3 +38,9 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+Run the server in the development docker container
+
+```bash
+docker compose up -d
+docker-compose exec web python manage.py createsuperuser
+```

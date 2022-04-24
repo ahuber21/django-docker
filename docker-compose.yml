@@ -13,5 +13,20 @@ services:
     depends_on:
       - db
 
+  mosquitto:
+    image: eclipse-mosquitto:2.0.14
+    ports:
+      - 1883:1883
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  node-red:
+    image: nodered/node-red:2.2.2-12
+    ports:
+      - 1880:1880
+    volumes:
+      - nodered_data:/data
+
 volumes:
   postgres_data:
+  nodered_data:

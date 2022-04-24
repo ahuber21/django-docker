@@ -1,0 +1,116 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b00ec894da050852",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "fingerprint_debug listenener",
+        "topic": "fingerprint_debug",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 560,
+        "wires": [
+            [
+                "f2d16e6bd596852c"
+            ]
+        ]
+    },
+    {
+        "id": "047d440f1034f216",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "fingerprint_out listener",
+        "topic": "fingerprint_out",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 440,
+        "y": 700,
+        "wires": [
+            [
+                "f2d16e6bd596852c"
+            ]
+        ]
+    },
+    {
+        "id": "d6f416d96a9e1627",
+        "type": "http request",
+        "z": "f6f2187d.f17ca8",
+        "name": "POST web:8000/mqtt/message/",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "web:8000/mqtt/message/",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 1070,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f2d16e6bd596852c",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Convert to POST",
+        "func": "msg.payload = {\n    \"topic\": msg.topic,\n    \"payload\": msg.payload,\n}\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\"\n}\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 620,
+        "wires": [
+            [
+                "d6f416d96a9e1627"
+            ]
+        ]
+    },
+    {
+        "id": "4b090ccffa9969da",
+        "type": "mqtt-broker",
+        "name": "Docker MQTT",
+        "broker": "mosquitto",
+        "port": "1883",
+        "clientid": "node-red",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "nodered-status",
+        "birthQos": "0",
+        "birthPayload": "online",
+        "birthMsg": {},
+        "closeTopic": "nodered-status",
+        "closeQos": "0",
+        "closePayload": "going offline",
+        "closeMsg": {},
+        "willTopic": "nodered-status",
+        "willQos": "0",
+        "willPayload": "unexpected disconnect",
+        "willMsg": {},
+        "sessionExpiry": ""
+    }
+]
