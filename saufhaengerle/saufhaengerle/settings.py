@@ -154,4 +154,8 @@ LOGGING = {
     },
 }
 
-MQTT: dict[str, Any] = {"host": env("MQTT_HOST"), "port": int(env("MQTT_PORT"))}
+MQTT: dict[str, Any] = {
+    "host": env("MQTT_HOST"),
+    "port": int(env("MQTT_PORT")),
+    "topics": {"FINGERPRINT_DEBUG": "fingerprint_debug", "FINGERPRINT_OUT": "fingerprint_out"},
+}

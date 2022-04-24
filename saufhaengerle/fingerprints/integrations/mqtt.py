@@ -18,7 +18,10 @@ def on_disconnect(client: mqtt.Client, *_) -> None:
 def connect(client: mqtt.Client) -> None:
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
-    client.connect(MQTT["host"], MQTT["port"])
+    try:
+        client.connect(MQTT["host"], MQTT["port"])
+    except OSError:
+        log.error(f"MQTT: Failed to connect to {MQTT['host']}:{MQTT['port']}")
 
 
 CLIENT = mqtt.Client()

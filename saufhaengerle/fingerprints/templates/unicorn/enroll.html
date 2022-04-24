@@ -1,14 +1,18 @@
-<div>
-    <input unicorn:model="name" type="text" id="text" /><br />
+<div unicorn:poll-2000="get_messages">
+    <select unicorn:model="owner_username" unicorn:change="reset_messages">
+        {% for u in users %}
+        <option value="{{ u.username }}">{{ u.username }}</option>
+        {% endfor %}
+    </select>
 
-    <select unicorn:model="finger">
+    <select unicorn:model="finger" unicorn:change="reset_messages">
         {% for f in finger_options %}
         <option value="{{ f }}">{{ f }}</option>
         {% endfor %}
-    </select><br />
-
+    </select>
 
     <button unicorn:click="enroll" type="button">GO</button> <br />
+    <button unicorn:click="save" type="button">SAVE</button> <br />
 
     <h3>Output</h3>
     <ul>
@@ -16,4 +20,5 @@
         <li>{{ message }}</li>
         {% endfor %}
     </ul>
+
 </div>
