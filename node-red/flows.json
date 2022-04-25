@@ -44,7 +44,8 @@
         "y": 700,
         "wires": [
             [
-                "f2d16e6bd596852c"
+                "f2d16e6bd596852c",
+                "9f6fc48fef44831e"
             ]
         ]
     },
@@ -84,6 +85,123 @@
         "wires": [
             [
                 "d6f416d96a9e1627"
+            ]
+        ]
+    },
+    {
+        "id": "9f6fc48fef44831e",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Identify successful fingerprint auth",
+        "func": "if (msg.payload.match(/ID = \\d+ | score = \\d/))\n    return msg\nelse\n    return null\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 780,
+        "wires": [
+            [
+                "8f333d3f850bad24",
+                "6f4e57418dcc4afd"
+            ]
+        ]
+    },
+    {
+        "id": "8f333d3f850bad24",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "Set UNLOCK effect",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "FX=2&A=10&T=1&IX=200&SX=200&CL=#00FF00&C2=#00FF99",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1170,
+        "y": 740,
+        "wires": [
+            [
+                "a9dc1a9c9b3a4e77"
+            ]
+        ]
+    },
+    {
+        "id": "a9dc1a9c9b3a4e77",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "wled/fingerprint-status/api",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 1600,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "6f4e57418dcc4afd",
+        "type": "delay",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1080,
+        "y": 840,
+        "wires": [
+            [
+                "3339a5f180d13f9c"
+            ]
+        ]
+    },
+    {
+        "id": "3339a5f180d13f9c",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "Set IDLE effect",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "FX=15&A=10&T=1&IX=100&SX=5&CL=#f54284&C2=#42b6f5&C3=#f5a742",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1240,
+        "y": 840,
+        "wires": [
+            [
+                "a9dc1a9c9b3a4e77"
             ]
         ]
     },
