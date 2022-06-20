@@ -45,6 +45,19 @@ services:
     volumes:
       - nodered_data:/data
 
+  larynx:
+    image: rhasspy/larynx:de-de
+    ports:
+      - 5002:5002
+
+  flask-larynx:
+    build:
+      context: ./flask-larynx
+      dockerfile: Dockerfile.prod
+
+    ports:
+      - 1349:1349
+
 volumes:
   postgres_data:
   static_volume:

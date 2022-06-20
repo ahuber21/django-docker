@@ -25,6 +25,18 @@ services:
     volumes:
       - nodered_data:/data
 
+  larynx:
+    image: rhasspy/larynx:de-de
+    ports:
+      - 5002:5002
+
+  flask-larynx:
+    build: ./flask-larynx
+    ports:
+      - 1349:1349
+    volumes:
+      - ./flask-larynx:/home/app/web/
+
 volumes:
   postgres_data:
   nodered_data:

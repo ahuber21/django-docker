@@ -7,7 +7,7 @@ https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
 ## dev + prod environments
 
 The development environment is defined by the files: docker-compose.yml, Dockerfile, .env, etc.
-The production envioronment is setup with the corresponding files with .prod in their names.
+The production environment is setup with the corresponding files with .prod in their names.
 
 ## Development
 
@@ -55,3 +55,19 @@ docker-compose -f docker-compose.prod.yml up -d --build # --build only required 
 
 * Navigate to http://localhost:8000/admin (development) / http://localhost:1337/admin (production) and make sure you can access the admin panel with the credentials you entered using `createsuperuser`
 * Navigate to http://localhost:8000/fingerprints/enroll/ to add a new fingerprint
+
+
+
+## Using larynx (directly)
+
+* Navigate to http://localhost:5002 (development) / http://localhost:5002 (production)
+
+Use curl to talk to the api
+
+```
+function get
+curl -X GET "http://localhost:5002/api/tts?voice=de-de%2Fthorsten-glow_tts&text=Du%20riesen%20Pimmel&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.005&noiseScale=0.333&lengthScale=0.85"
+```
+
+
+## Using the Flask API to speak with larynx (on speaker connected to RPi)
