@@ -36,6 +36,7 @@ services:
       - 1349:1349
     volumes:
       - ./flask-larynx:/home/app/web/
+      - /dev/snd:/dev/snd
 
 volumes:
   postgres_data:
