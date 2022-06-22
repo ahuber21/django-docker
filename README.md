@@ -28,7 +28,7 @@ poetry install
 Option 1) Run the server locally
 
 ```python
-python manage.py migrate
+python manage.py migrate  # path must be writeable!
 python manage.py collectstatic
 python manage.py createsuperuser
 python manage.py runserver
@@ -39,7 +39,7 @@ Option 2) Run the server in the development docker container
 ```bash
 docker compose up -d --build # --build only required after changes
 # create a superuser - only required once
-docker-compose exec web python manage.py createsuperuser
+docker compose exec web python manage.py createsuperuser
 ```
 
 ## Production environment
@@ -47,7 +47,7 @@ docker-compose exec web python manage.py createsuperuser
 Run the production docker environment
 
 ```bash
-docker-compose -f docker-compose.prod.yml up -d --build # --build only required after changes
+docker compose -f docker-compose.prod.yml up -d --build # --build only required after changes
 ```
 
 
