@@ -1,15 +1,15 @@
 [
     {
-        "id": "f6f2187d.f17ca8",
+        "id": "877c6896e9915ec2",
         "type": "tab",
         "label": "Flow 1",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "b00ec894da050852",
+        "id": "6e1b429b6842590a",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "fingerprint_debug listenener",
         "topic": "fingerprint_debug",
         "qos": "2",
@@ -23,14 +23,14 @@
         "y": 560,
         "wires": [
             [
-                "f2d16e6bd596852c"
+                "083325ec093cae3a"
             ]
         ]
     },
     {
-        "id": "047d440f1034f216",
+        "id": "2398f6babee1242e",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "fingerprint_out listener",
         "topic": "fingerprint_out",
         "qos": "2",
@@ -44,15 +44,15 @@
         "y": 700,
         "wires": [
             [
-                "f2d16e6bd596852c",
-                "9f6fc48fef44831e"
+                "083325ec093cae3a",
+                "e7d6861a2ddeb367"
             ]
         ]
     },
     {
-        "id": "d6f416d96a9e1627",
+        "id": "c917ba800b1ffc08",
         "type": "http request",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "POST web:8000/mqtt/message/",
         "method": "POST",
         "ret": "txt",
@@ -70,9 +70,9 @@
         ]
     },
     {
-        "id": "f2d16e6bd596852c",
+        "id": "083325ec093cae3a",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "Convert to POST",
         "func": "msg.payload = {\n    \"topic\": msg.topic,\n    \"payload\": msg.payload,\n}\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\"\n}\nreturn msg",
         "outputs": 1,
@@ -84,14 +84,14 @@
         "y": 620,
         "wires": [
             [
-                "d6f416d96a9e1627"
+                "c917ba800b1ffc08"
             ]
         ]
     },
     {
-        "id": "9f6fc48fef44831e",
+        "id": "e7d6861a2ddeb367",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "Identify successful fingerprint auth",
         "func": "if (msg.payload.match(/ID = \\d+ | score = \\d/))\n    return msg\nelse\n    return null\n",
         "outputs": 1,
@@ -103,15 +103,16 @@
         "y": 780,
         "wires": [
             [
-                "8f333d3f850bad24",
-                "6f4e57418dcc4afd"
+                "4654e483189709f4",
+                "9c8d6675a819773a",
+                "cc857c59e1b9b915"
             ]
         ]
     },
     {
-        "id": "8f333d3f850bad24",
+        "id": "4654e483189709f4",
         "type": "change",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "Set UNLOCK effect",
         "rules": [
             {
@@ -131,14 +132,14 @@
         "y": 740,
         "wires": [
             [
-                "a9dc1a9c9b3a4e77"
+                "c7482cc8a54ee938"
             ]
         ]
     },
     {
-        "id": "a9dc1a9c9b3a4e77",
+        "id": "c7482cc8a54ee938",
         "type": "mqtt out",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "",
         "topic": "wled/fingerprint-status/api",
         "qos": "",
@@ -154,9 +155,9 @@
         "wires": []
     },
     {
-        "id": "6f4e57418dcc4afd",
+        "id": "9c8d6675a819773a",
         "type": "delay",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "",
         "pauseType": "delay",
         "timeout": "10",
@@ -174,14 +175,14 @@
         "y": 840,
         "wires": [
             [
-                "3339a5f180d13f9c"
+                "c567f363b89ba76d"
             ]
         ]
     },
     {
-        "id": "3339a5f180d13f9c",
+        "id": "c567f363b89ba76d",
         "type": "change",
-        "z": "f6f2187d.f17ca8",
+        "z": "877c6896e9915ec2",
         "name": "Set IDLE effect",
         "rules": [
             {
@@ -201,7 +202,83 @@
         "y": 840,
         "wires": [
             [
-                "a9dc1a9c9b3a4e77"
+                "c7482cc8a54ee938"
+            ]
+        ]
+    },
+    {
+        "id": "b36aa30.3a7276",
+        "type": "http request",
+        "z": "877c6896e9915ec2",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "x": 1290,
+        "y": 980,
+        "wires": [
+            [
+                "1ef9987c.956c78"
+            ]
+        ]
+    },
+    {
+        "id": "1ef9987c.956c78",
+        "type": "debug",
+        "z": "877c6896e9915ec2",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1490,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "cc857c59e1b9b915",
+        "type": "function",
+        "z": "877c6896e9915ec2",
+        "name": "set msg.url",
+        "func": "// TODO determine what to say based on user name\nconst sentence = \"Da hat aber einer Durst\"\n\nreturn {\n    url: \"http://flask-larynx:1349/talk/\" + sentence\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1090,
+        "y": 980,
+        "wires": [
+            [
+                "b36aa30.3a7276"
+            ]
+        ]
+    },
+    {
+        "id": "b0fd287d3213a41f",
+        "type": "inject",
+        "z": "877c6896e9915ec2",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "ID = 1 | score = 100",
+        "payloadType": "str",
+        "x": 430,
+        "y": 780,
+        "wires": [
+            [
+                "e7d6861a2ddeb367"
             ]
         ]
     },
