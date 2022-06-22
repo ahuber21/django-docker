@@ -8,7 +8,7 @@ pygame.mixer.init()
 
 
 def play(wav: bytes) -> None:
-    with NamedTemporaryFile("wav", "rb") as fp:
+    with NamedTemporaryFile("wb") as fp:
         fp.write(wav)
         fp.flush()
         pygame.mixer.music.load(fp.name)

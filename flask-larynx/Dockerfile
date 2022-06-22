@@ -26,10 +26,10 @@ COPY requirements.txt /home/app/web/
 
 ENV LARYNX_HOST="http://larynx:5002"
 ENV LARYNX_VOICE="de-de/thorsten-glow_tts"
-ENV LARYNX_VOCODER="hifi_gan/universal_large"
+ENV LARYNX_VOCODER="hifi_gan/vctk_small"
 ENV LARYNX_DENOISER_STRENGTH=0.005
 ENV LARYNX_NOISE_SCALE=0.333
-ENV LARYNX_LENGTH_SCALE=0.85
+ENV LARYNX_LENGTH_SCALE=1.5
 
 # Install packages and run app
 RUN pip install -r requirements.txt
