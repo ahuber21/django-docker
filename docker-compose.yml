@@ -36,6 +36,8 @@ services:
       - 1349:1349
     volumes:
       - ./flask-larynx:/home/app/web/
+      - ./flask-larynx/asoundrc:/root/.asoundrc
+    devices:
       - /dev/snd:/dev/snd
 
 volumes:

@@ -11,6 +11,7 @@ ENV FLASK_PORT=1349
 RUN apk add --no-cache \
     python3 python3-dev \
     gcc musl-dev \
+    alsa-utils pulseaudio pulseaudio-alsa alsa-plugins-pulse \
     sdl2-dev sdl2_ttf-dev sdl2_image-dev sdl2_mixer-dev \
     libjpeg-turbo-dev freetype-dev portmidi-dev && \
     python3 -m ensurepip && \
