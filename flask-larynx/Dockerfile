@@ -13,7 +13,7 @@ RUN apk add --no-cache \
     gcc musl-dev \
     alsa-utils pulseaudio pulseaudio-alsa alsa-plugins-pulse \
     sdl2-dev sdl2_ttf-dev sdl2_image-dev sdl2_mixer-dev \
-    libjpeg-turbo-dev freetype-dev portmidi-dev && \
+    mpg123-dev libjpeg-turbo-dev freetype-dev portmidi-dev && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
     pip3 install --upgrade pip setuptools && \
