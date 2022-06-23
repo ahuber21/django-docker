@@ -65,9 +65,13 @@ docker compose -f docker-compose.prod.yml up -d --build # --build only required 
 Use curl to talk to the api
 
 ```
-function get
-curl -X GET "http://localhost:5002/api/tts?voice=de-de%2Fthorsten-glow_tts&text=Du%20riesen%20Pimmel&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.005&noiseScale=0.333&lengthScale=0.85"
+curl "http://localhost:5002/api/tts?voice=de-de%2Fthorsten-glow_tts&text=Du%20riesen%20Pimmel&vocoder=hifi_gan%2Funiversal_large&denoiserStrength=0.005&noiseScale=0.333&lengthScale=0.85"
 ```
 
 
 ## Using the Flask API to speak with larynx (on speaker connected to RPi)
+
+```
+curl "http://localhost:1349/talk/Bier"
+curl "http://192.168.0.42:1349/talk/Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier%20Bier"
+```

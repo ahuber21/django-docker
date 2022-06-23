@@ -1,13 +1,20 @@
+import os
 from tempfile import NamedTemporaryFile
 from time import sleep
 
 import pygame
 
-pygame.mixer.pre_init(buffer=1512)
-pygame.mixer.init()
+IS_MACBOOK = os.getenv("IS_MACBOOK") is not None
+
+if not IS_MACBOOK:
+    pygame.mixer.pre_init(buffer=1512)
+    pygame.mixer.init()
 
 
 def play(wav: bytes) -> None:
+    if IS_MACBOOK:
+        return
+
     with NamedTemporaryFile("wb") as fp:
         fp.write(wav)
         fp.flush()
