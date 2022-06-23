@@ -7,7 +7,7 @@ from saufhaengerle.settings import MQTT
 log = getLogger("fingerprints")
 
 
-def on_connect(client: mqtt.Client, *_) -> None:
+def on_connect(*_) -> None:
     log.debug("MQTT connected")
 
 
@@ -19,9 +19,9 @@ def connect(client: mqtt.Client) -> None:
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
     try:
-        client.connect(MQTT["host"], MQTT["port"])
+        client.connect(MQTT.host, MQTT.port)
     except OSError:
-        log.error(f"MQTT: Failed to connect to {MQTT['host']}:{MQTT['port']}")
+        log.error(f"MQTT: Failed to connect to {MQTT.host}:{MQTT.port}")
 
 
 CLIENT = mqtt.Client()

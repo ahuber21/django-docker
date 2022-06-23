@@ -17,4 +17,7 @@ class Message(models.Model):
         payload = self.payload[:150]
         if len(self.payload) > 150:
             payload += "..."
-        return f"[{self.created_at.strftime('%Y-%d-%m %H:%M:%S')}] {self.topic}: {payload}"
+        if self.created_at:
+            return f"[{self.created_at.strftime('%Y-%d-%m %H:%M:%S')}] {self.topic}: {payload}"
+        else:
+            return f"[in memory] {self.topic}: {payload}"

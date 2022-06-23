@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -151,11 +152,19 @@ LOGGING = {
     "loggers": {
         "mqtt-api": {"handlers": ["console"], "level": "DEBUG"},
         "fingerprints": {"handlers": ["console"], "level": "DEBUG"},
+        "users": {"handlers": ["console"], "level": "DEBUG"},
     },
 }
 
-MQTT: dict[str, Any] = {
-    "host": env("MQTT_HOST"),
-    "port": int(env("MQTT_PORT")),
-    "topics": {"FINGERPRINT_DEBUG": "fingerprint_debug", "FINGERPRINT_OUT": "fingerprint_out"},
-}
+
+@dataclass
+class MQTTTopics:
+    FINGERPRINT_DEBUG = "fingerprint_debug"
+    FINGERPRINT_OUT = "fingerprint_out"
+
+
+@dataclass
+class MQTT:
+    host: str = env("MQTT_HOST")
+    port = int(env("MQTT_PORT"))
+    topics = MQTTTopics
