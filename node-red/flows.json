@@ -1,5 +1,12 @@
 [{
-        "id": "9714d8d163999f95",
+        "id": "8e4367428f760b3f",
+        "type": "tab",
+        "label": "MQTT to Django",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "e4a222995601d487",
         "type": "tab",
         "label": "Valve unlock",
         "disabled": false,
@@ -7,187 +14,28 @@
         "env": []
     },
     {
-        "id": "1ad8ae2aaa5fa39f",
-        "type": "change",
-        "z": "9714d8d163999f95",
-        "name": "Set UNLOCK effect",
-        "rules": [{
-            "t": "set",
-            "p": "payload",
-            "pt": "msg",
-            "to": "FX=2&A=10&T=1&IX=200&SX=200&CL=#00FF00&C2=#00FF99",
-            "tot": "str"
-        }],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1150,
-        "y": 500,
-        "wires": [
-            [
-                "41bf140287b7a9a8",
-                "056c2ba98639b007"
-            ]
-        ]
-    },
-    {
-        "id": "41bf140287b7a9a8",
-        "type": "mqtt out",
-        "z": "9714d8d163999f95",
-        "name": "",
-        "topic": "wled/fingerprint-status/api",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "4b090ccffa9969da",
-        "x": 1540,
-        "y": 500,
-        "wires": []
-    },
-    {
-        "id": "056c2ba98639b007",
-        "type": "delay",
-        "z": "9714d8d163999f95",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "10",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 1240,
-        "y": 580,
-        "wires": [
-            [
-                "7260e6fc43e09a70"
-            ]
-        ]
-    },
-    {
-        "id": "7260e6fc43e09a70",
-        "type": "change",
-        "z": "9714d8d163999f95",
-        "name": "Set IDLE effect",
-        "rules": [{
-            "t": "set",
-            "p": "payload",
-            "pt": "msg",
-            "to": "FX=15&A=10&T=1&IX=100&SX=5&CL=#f54284&C2=#42b6f5&C3=#f5a742",
-            "tot": "str"
-        }],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1400,
-        "y": 580,
-        "wires": [
-            [
-                "41bf140287b7a9a8"
-            ]
-        ]
-    },
-    {
-        "id": "3106ecaa6acc579a",
-        "type": "http request",
-        "z": "9714d8d163999f95",
-        "name": "",
-        "method": "GET",
-        "ret": "txt",
-        "url": "",
-        "x": 1330,
-        "y": 780,
-        "wires": [
-            [
-                "f4f957554143f16e"
-            ]
-        ]
-    },
-    {
-        "id": "f4f957554143f16e",
-        "type": "debug",
-        "z": "9714d8d163999f95",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 1530,
-        "y": 780,
-        "wires": []
-    },
-    {
-        "id": "ead44ab8e486f083",
-        "type": "function",
-        "z": "9714d8d163999f95",
-        "name": "set msg.url",
-        "func": "const name = msg.payload.split('|')[0].trim()\nconst sentence = \"Prost \" + name\n\nreturn {\n    url: \"http://flask-larynx:1349/talk/\" + sentence\n}",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1130,
-        "y": 780,
-        "wires": [
-            [
-                "3106ecaa6acc579a"
-            ]
-        ]
-    },
-    {
-        "id": "1eb39ac3d29fcc64",
-        "type": "comment",
-        "z": "9714d8d163999f95",
-        "name": "Fancy LED shit",
+        "id": "49397d274024567e",
+        "type": "tab",
+        "label": "Valve lock",
+        "disabled": false,
         "info": "",
-        "x": 1140,
-        "y": 460,
-        "wires": []
+        "env": []
     },
     {
-        "id": "0f0c99a903f58c95",
-        "type": "comment",
-        "z": "9714d8d163999f95",
-        "name": "Fancy text-to-speech shit",
+        "id": "9b2805f167ce2c8f",
+        "type": "tab",
+        "label": "Scale",
+        "disabled": false,
         "info": "",
-        "x": 1170,
-        "y": 720,
-        "wires": []
+        "env": []
     },
     {
-        "id": "732a1b8a4ce7c86a",
-        "type": "mqtt in",
-        "z": "9714d8d163999f95",
-        "name": "saufhaengerle listener",
-        "topic": "saufhaengerle/unlock",
-        "qos": "2",
-        "datatype": "auto",
-        "broker": "4b090ccffa9969da",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 720,
-        "y": 500,
-        "wires": [
-            [
-                "1ad8ae2aaa5fa39f",
-                "ead44ab8e486f083"
-            ]
-        ]
+        "id": "f99dc8f1e17bb267",
+        "type": "subflow",
+        "name": "Subflow 1",
+        "info": "",
+        "in": [],
+        "out": []
     },
     {
         "id": "4b090ccffa9969da",
@@ -214,5 +62,659 @@
         "willPayload": "unexpected disconnect",
         "willMsg": {},
         "sessionExpiry": ""
+    },
+    {
+        "id": "e0c009fc8620cb0c",
+        "type": "mqtt in",
+        "z": "8e4367428f760b3f",
+        "name": "MQTT listener",
+        "topic": "#",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 100,
+        "wires": [
+            [
+                "b8c773ec1966d935"
+            ]
+        ]
+    },
+    {
+        "id": "2828e2a65f4ebb65",
+        "type": "http request",
+        "z": "8e4367428f760b3f",
+        "name": "POST web:8000/mqtt/message/",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "web:8000/mqtt/message/",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 850,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b8c773ec1966d935",
+        "type": "function",
+        "z": "8e4367428f760b3f",
+        "name": "Convert to POST",
+        "func": "msg.payload = {\n    \"topic\": msg.topic,\n    \"payload\": msg.payload,\n}\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\"\n}\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 100,
+        "wires": [
+            [
+                "2828e2a65f4ebb65"
+            ]
+        ]
+    },
+    {
+        "id": "b5ebcd4d5c14181d",
+        "type": "inject",
+        "z": "8e4367428f760b3f",
+        "name": "",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "fingerprint_out",
+        "payload": "ID = 1 | score = 100",
+        "payloadType": "str",
+        "x": 350,
+        "y": 60,
+        "wires": [
+            [
+                "b8c773ec1966d935"
+            ]
+        ]
+    },
+    {
+        "id": "6fce0b721277dda3",
+        "type": "comment",
+        "z": "8e4367428f760b3f",
+        "name": "forward messages to database",
+        "info": "",
+        "x": 630,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "4c2a27672e471cab",
+        "type": "change",
+        "z": "e4a222995601d487",
+        "name": "Set UNLOCK effect",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "FX=2&A=10&T=1&IX=200&SX=200&CL=#00FF00&C2=#00FF99",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1150,
+        "y": 500,
+        "wires": [
+            [
+                "e78278c4790fe1d7"
+            ]
+        ]
+    },
+    {
+        "id": "e78278c4790fe1d7",
+        "type": "mqtt out",
+        "z": "e4a222995601d487",
+        "name": "",
+        "topic": "wled/fingerprint-status/api",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 1600,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "9d2dccf09c2bc316",
+        "type": "http request",
+        "z": "e4a222995601d487",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "x": 1330,
+        "y": 640,
+        "wires": [
+            [
+                "94ea05f8e9bd48fe"
+            ]
+        ]
+    },
+    {
+        "id": "94ea05f8e9bd48fe",
+        "type": "debug",
+        "z": "e4a222995601d487",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1530,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "d0545dba65b9826a",
+        "type": "function",
+        "z": "e4a222995601d487",
+        "name": "set msg.url",
+        "func": "const name = msg.payload.split('|')[0].trim()\nconst sentence = \"Schnell! Ein Bier für \" + name\n\nreturn {\n    url: \"http://flask-larynx:1349/talk/\" + sentence\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 640,
+        "wires": [
+            [
+                "9d2dccf09c2bc316"
+            ]
+        ]
+    },
+    {
+        "id": "7fbf55453b4fecb1",
+        "type": "comment",
+        "z": "e4a222995601d487",
+        "name": "Fancy LED shit",
+        "info": "",
+        "x": 1140,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "ad6248ec6e5344cb",
+        "type": "comment",
+        "z": "e4a222995601d487",
+        "name": "Fancy text-to-speech shit",
+        "info": "",
+        "x": 1170,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "a037706c9e0d94ad",
+        "type": "mqtt in",
+        "z": "e4a222995601d487",
+        "name": "saufhaengerle unlock listener",
+        "topic": "cmdn/saufhaengerle/unlock",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 740,
+        "y": 500,
+        "wires": [
+            [
+                "4c2a27672e471cab",
+                "d0545dba65b9826a",
+                "fc6543985ef41773"
+            ]
+        ]
+    },
+    {
+        "id": "3bffd07dde74171a",
+        "type": "comment",
+        "z": "e4a222995601d487",
+        "name": "Unlocking shit",
+        "info": "",
+        "x": 1130,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "d07951a406239154",
+        "type": "mqtt out",
+        "z": "e4a222995601d487",
+        "name": "",
+        "topic": "cmnd/valve1/POWER",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 1500,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "fc6543985ef41773",
+        "type": "function",
+        "z": "e4a222995601d487",
+        "name": "unlock command",
+        "func": "msg.payload = \"ON\"\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 780,
+        "wires": [
+            [
+                "d07951a406239154",
+                "5d6fce5b78eac6d1",
+                "6adc2167e9fe962b",
+                "c4257eb2395fcbfa",
+                "60a806bbee172e89"
+            ]
+        ]
+    },
+    {
+        "id": "c4257eb2395fcbfa",
+        "type": "mqtt out",
+        "z": "e4a222995601d487",
+        "name": "",
+        "topic": "cmnd/valve4/POWER",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 1500,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "5d6fce5b78eac6d1",
+        "type": "mqtt out",
+        "z": "e4a222995601d487",
+        "name": "",
+        "topic": "cmnd/valve2/POWER",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 1500,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "6adc2167e9fe962b",
+        "type": "mqtt out",
+        "z": "e4a222995601d487",
+        "name": "",
+        "topic": "cmnd/valve3/POWER",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 1500,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "60a806bbee172e89",
+        "type": "delay",
+        "z": "e4a222995601d487",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1120,
+        "y": 940,
+        "wires": [
+            [
+                "c460bc865939cfbc"
+            ]
+        ]
+    },
+    {
+        "id": "dc03d1734a37a2b2",
+        "type": "comment",
+        "z": "e4a222995601d487",
+        "name": "Locking shit",
+        "info": "",
+        "x": 1130,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "83385906bce53d4d",
+        "type": "inject",
+        "z": "e4a222995601d487",
+        "name": "Unlock valves",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 810,
+        "y": 900,
+        "wires": [
+            [
+                "fc6543985ef41773"
+            ]
+        ]
+    },
+    {
+        "id": "c60681d06ae54f68",
+        "type": "comment",
+        "z": "e4a222995601d487",
+        "name": "Manual",
+        "info": "",
+        "x": 790,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "5e528a21ebce142c",
+        "type": "inject",
+        "z": "e4a222995601d487",
+        "name": "Lock valves",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 810,
+        "y": 940,
+        "wires": [
+            [
+                "c460bc865939cfbc"
+            ]
+        ]
+    },
+    {
+        "id": "c460bc865939cfbc",
+        "type": "mqtt out",
+        "z": "e4a222995601d487",
+        "name": "",
+        "topic": "cmnd/saufhaengerle/lock",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 1510,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "b5473a8135357066",
+        "type": "function",
+        "z": "49397d274024567e",
+        "name": "lock command",
+        "func": "msg.payload = \"OFF\"\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 120,
+        "wires": [
+            [
+                "a857415cf94fa1a7",
+                "516d0121c968bf5f",
+                "e94ac98de109e632",
+                "5ac33c83c28ee5a6"
+            ]
+        ]
+    },
+    {
+        "id": "8096300f57e6f7b7",
+        "type": "change",
+        "z": "49397d274024567e",
+        "name": "Set IDLE effect",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "FX=15&A=10&T=1&IX=100&SX=5&CL=#f54284&C2=#42b6f5&C3=#f5a742",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 940,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a857415cf94fa1a7",
+        "type": "mqtt out",
+        "z": "49397d274024567e",
+        "name": "",
+        "topic": "cmnd/valve1/POWER",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 960,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "5ac33c83c28ee5a6",
+        "type": "mqtt out",
+        "z": "49397d274024567e",
+        "name": "",
+        "topic": "cmnd/valve4/POWER",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 960,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "516d0121c968bf5f",
+        "type": "mqtt out",
+        "z": "49397d274024567e",
+        "name": "",
+        "topic": "cmnd/valve2/POWER",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 960,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "e94ac98de109e632",
+        "type": "mqtt out",
+        "z": "49397d274024567e",
+        "name": "",
+        "topic": "cmnd/valve3/POWER",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 960,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "727b95f1490abd1f",
+        "type": "mqtt in",
+        "z": "49397d274024567e",
+        "name": "saufhaengerle lock listener",
+        "topic": "cmnd/saufhaengerle/lock",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 230,
+        "y": 120,
+        "wires": [
+            [
+                "b5473a8135357066",
+                "8096300f57e6f7b7",
+                "14d6b1803b65ef1a"
+            ]
+        ]
+    },
+    {
+        "id": "4af964c0642263d3",
+        "type": "http request",
+        "z": "49397d274024567e",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "x": 790,
+        "y": 360,
+        "wires": [
+            [
+                "75444cb06727b6b5"
+            ]
+        ]
+    },
+    {
+        "id": "75444cb06727b6b5",
+        "type": "debug",
+        "z": "49397d274024567e",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 990,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "14d6b1803b65ef1a",
+        "type": "function",
+        "z": "49397d274024567e",
+        "name": "set msg.url",
+        "func": "const name = msg.payload.split('|')[0].trim()\nconst sentence = \"Na dann Prost \" + name\n\nreturn {\n    url: \"http://flask-larynx:1349/talk/\" + sentence\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 360,
+        "wires": [
+            [
+                "4af964c0642263d3"
+            ]
+        ]
+    },
+    {
+        "id": "9d69711105f83570",
+        "type": "comment",
+        "z": "49397d274024567e",
+        "name": "Fancy text-to-speech shit",
+        "info": "",
+        "x": 630,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "89d9c13776e5f4a2",
+        "type": "comment",
+        "z": "49397d274024567e",
+        "name": "Valve lock",
+        "info": "",
+        "x": 580,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "1401d24e19b537b6",
+        "type": "comment",
+        "z": "49397d274024567e",
+        "name": "LED idle",
+        "info": "",
+        "x": 580,
+        "y": 200,
+        "wires": []
     }
 ]
