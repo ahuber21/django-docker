@@ -2,6 +2,7 @@ import re
 from logging import getLogger
 from typing import Any
 
+from actions.models import Event, EventType
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from fingerprints.models import Fingerprint
@@ -21,6 +22,8 @@ def message_create_callback(sender: Any, instance: Message, **_: Any) -> None:
     topic = str(instance.topic)
     if topic == MQTT.topics.FINGERPRINT_OUT:
         __handle_fingerprint_out_message(instance)
+    elif topic == MQTT.topics.LOCK:
+        __handle_valve_lock_message(instance)
     else:
         log.info(f"Ignoring message on topic '{topic}'")
 
@@ -35,9 +38,13 @@ def __handle_fingerprint_out_message(message: Message) -> None:
             finger = Fingerprint.objects.get(template_id=template_id)
         except Fingerprint.DoesNotExist:
             log.warning(f"No fingerprint found for {template_id=}")
-            mqtt_client.send_message("saufhaengerle/error", f"No fingerprint found for {template_id=}")
+            mqtt_client.send_message(MQTT.topics.ERROR, f"No fingerprint found for {template_id=}")
             return
 
-        mqtt_client.send_message(
-            "saufhaengerle/unlock", f"{finger.owner.first_name or finger.owner.username} | {finger.finger_type}"
-        )
+        # create unlock event
+        Event.objects.create(event_type=EventType.UNLOCK, initiator=finger.owner)
+
+
+def __handle_valve_lock_message(_: Message) -> None:
+    last_unlock = Event.objects.filter(event_type=EventType.UNLOCK).latest()
+    Event.objects.create(event_type=EventType.LOCK, initiator=last_unlock.initiator)

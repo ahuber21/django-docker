@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_unicorn",
     "admin_auto_filters",
+    "actions",
     "fingerprints",
     "mqtt",
     "users",
@@ -161,6 +162,9 @@ LOGGING = {
 class MQTTTopics:
     FINGERPRINT_DEBUG = "fingerprint_debug"
     FINGERPRINT_OUT = "fingerprint_out"
+    ERROR = "saufhaengerle/error"
+    UNLOCK = "cmnd/saufhaengerle/unlock"
+    LOCK = "cmnd/saufhaengerle/lock"
 
 
 @dataclass
