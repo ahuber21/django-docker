@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "admin_auto_filters",
     "actions",
     "fingerprints",
+    "saufhaengerle",
     "mqtt",
     "scale",
     "users",
@@ -164,9 +165,9 @@ LOGGING = {
 class MQTTTopics:
     FINGERPRINT_DEBUG = "fingerprint_debug"
     FINGERPRINT_OUT = "fingerprint_out"
+    FINGERPRINT_IN = "fingerprint_in"
     ERROR = "saufhaengerle/error"
     UNLOCK = "cmnd/saufhaengerle/unlock"
-    LOCK = "cmnd/saufhaengerle/lock"
 
 
 @dataclass

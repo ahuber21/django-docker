@@ -4,12 +4,12 @@ from typing import Optional
 
 from django.utils.timezone import now
 from django_unicorn.components import QuerySetType, UnicornView
+
 from fingerprints.models import Fingerprint, FingerTypes
 from mqtt.integrations import mqtt_client
 from mqtt.models import Message, Topic
-from users.models import User
-
 from saufhaengerle.settings import MQTT
+from users.models import User
 
 log = getLogger("fingerprints")
 
@@ -51,7 +51,7 @@ class EnrollView(UnicornView):
             self.messages.append(f"User '{self.owner_username}' already enrolled {self.finger}")
             return
 
-        mqtt.send_message("fingerprint_in", "ENROLL")
+        mqtt_client.send_message(MQTT.topics.FINGERPRINT_IN, "ENROLL")
 
     def get_messages(self) -> None:
         topics = Topic.objects.filter(name__in=(MQTT.topics.FINGERPRINT_DEBUG, MQTT.topics.FINGERPRINT_OUT))
