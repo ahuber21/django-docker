@@ -46,14 +46,6 @@
         "env": []
     },
     {
-        "id": "f99dc8f1e17bb267",
-        "type": "subflow",
-        "name": "Subflow 1",
-        "info": "",
-        "in": [],
-        "out": []
-    },
-    {
         "id": "4b090ccffa9969da",
         "type": "mqtt-broker",
         "name": "Docker MQTT",
