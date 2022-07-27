@@ -30,6 +30,22 @@
         "env": []
     },
     {
+        "id": "4b95a46b62b61483",
+        "type": "tab",
+        "label": "Scale configuration",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "aaa6e7e0da3b92f0",
+        "type": "tab",
+        "label": "Fingerprint configuration",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "f99dc8f1e17bb267",
         "type": "subflow",
         "name": "Subflow 1",
@@ -98,7 +114,7 @@
         "proxy": "",
         "authType": "",
         "senderr": false,
-        "x": 990,
+        "x": 1010,
         "y": 100,
         "wires": [
             []
@@ -115,7 +131,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
+        "x": 750,
         "y": 100,
         "wires": [
             [
@@ -124,7 +140,57 @@
         ]
     },
     {
-        "id": "b5ebcd4d5c14181d",
+        "id": "6fce0b721277dda3",
+        "type": "comment",
+        "z": "8e4367428f760b3f",
+        "name": "forward messages to database",
+        "info": "",
+        "x": 630,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "a89e53c0cbb3b55a",
+        "type": "function",
+        "z": "8e4367428f760b3f",
+        "name": "filter",
+        "func": "const forwarded_topics = [\n    \"fingerprint_debug\",\n    \"cmnd/saufhaengerle/unlock\",\n]\n\nif (forwarded_topics.indexOf(msg.topic) > -1)\n    return msg\nelse\n    return null\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 100,
+        "wires": [
+            [
+                "b8c773ec1966d935"
+            ]
+        ]
+    },
+    {
+        "id": "483ca174a6069b6f",
+        "type": "mqtt in",
+        "z": "8e4367428f760b3f",
+        "name": "",
+        "topic": "fingerprint_out",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 360,
+        "y": 300,
+        "wires": [
+            [
+                "41b66e558ade9e33"
+            ]
+        ]
+    },
+    {
+        "id": "3ca599e77d30251e",
         "type": "inject",
         "z": "8e4367428f760b3f",
         "name": "",
@@ -144,39 +210,281 @@
         "payload": "ID = 1 | score = 100",
         "payloadType": "str",
         "x": 350,
-        "y": 60,
+        "y": 260,
         "wires": [
             [
-                "a89e53c0cbb3b55a"
+                "41b66e558ade9e33"
             ]
         ]
     },
     {
-        "id": "6fce0b721277dda3",
-        "type": "comment",
-        "z": "8e4367428f760b3f",
-        "name": "forward messages to database",
-        "info": "",
-        "x": 630,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "a89e53c0cbb3b55a",
+        "id": "41b66e558ade9e33",
         "type": "function",
         "z": "8e4367428f760b3f",
-        "name": "filter",
-        "func": "const forwarded_topics = [\n    \"fingerprint_debug\",\n    \"fingerprint_out\",\n    \"scale1/out/kg\",\n    \"scale2/out/kg\",\n    \"scale3/out/kg\",\n    \"scale4/out/kg\",\n]\n\nif (forwarded_topics.indexOf(msg.topic) > -1)\n    return msg\nelse\n    return null\n",
+        "name": "successful finger scan",
+        "func": "if (/ID = \\d+ | score = \\d+/.test(msg.payload))\n    return msg;\nelse\n    return null;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 100,
+        "x": 600,
+        "y": 300,
         "wires": [
             [
-                "b8c773ec1966d935"
+                "e5c03466e86f970e"
+            ]
+        ]
+    },
+    {
+        "id": "26fe2b90cff59fc4",
+        "type": "http request",
+        "z": "8e4367428f760b3f",
+        "name": "POST /mqtt/unlock",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "web:8000/mqtt/unlock/",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 1010,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a0c8a67ccd95195c",
+        "type": "comment",
+        "z": "8e4367428f760b3f",
+        "name": "will send the UNLOCK command if ID exists",
+        "info": "",
+        "x": 1350,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "0577f161336d9b17",
+        "type": "comment",
+        "z": "8e4367428f760b3f",
+        "name": "will create a MQTT Message object",
+        "info": "",
+        "x": 1320,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "02c1bdd5d07a61c8",
+        "type": "mqtt in",
+        "z": "8e4367428f760b3f",
+        "name": "saufhaengerle lock listener",
+        "topic": "cmnd/saufhaengerle/lock",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 330,
+        "y": 420,
+        "wires": [
+            [
+                "43ea80891fec1b57"
+            ]
+        ]
+    },
+    {
+        "id": "e5c03466e86f970e",
+        "type": "function",
+        "z": "8e4367428f760b3f",
+        "name": "Convert to POST",
+        "func": "msg.payload = {\n    \"topic\": msg.topic,\n    \"payload\": msg.payload,\n}\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\"\n}\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 300,
+        "wires": [
+            [
+                "26fe2b90cff59fc4"
+            ]
+        ]
+    },
+    {
+        "id": "02f74af70205d004",
+        "type": "http request",
+        "z": "8e4367428f760b3f",
+        "name": "POST /mqtt/lock",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "web:8000/mqtt/lock/",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 1010,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "51314d3a2ece850e",
+        "type": "comment",
+        "z": "8e4367428f760b3f",
+        "name": "will register the lock event",
+        "info": "",
+        "x": 1290,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "341913eb62903be7",
+        "type": "mqtt in",
+        "z": "8e4367428f760b3f",
+        "name": "scale1/out/kg",
+        "topic": "scale1/out/kg",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 520,
+        "wires": [
+            [
+                "c8923dfcc5ceada4"
+            ]
+        ]
+    },
+    {
+        "id": "74661a2a87114d1b",
+        "type": "mqtt in",
+        "z": "8e4367428f760b3f",
+        "name": "scale4/out/kg",
+        "topic": "scale1/out/kg",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 700,
+        "wires": [
+            [
+                "c8923dfcc5ceada4"
+            ]
+        ]
+    },
+    {
+        "id": "f262453edbab3f3a",
+        "type": "mqtt in",
+        "z": "8e4367428f760b3f",
+        "name": "scale2/out/kg",
+        "topic": "scale1/out/kg",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 580,
+        "wires": [
+            [
+                "c8923dfcc5ceada4"
+            ]
+        ]
+    },
+    {
+        "id": "fd28603be9785a3e",
+        "type": "mqtt in",
+        "z": "8e4367428f760b3f",
+        "name": "scale3/out/kg",
+        "topic": "scale1/out/kg",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 640,
+        "wires": [
+            [
+                "c8923dfcc5ceada4"
+            ]
+        ]
+    },
+    {
+        "id": "c8923dfcc5ceada4",
+        "type": "function",
+        "z": "8e4367428f760b3f",
+        "name": "Convert to POST if datataking",
+        "func": "msg.payload = {\n    \"name\": msg.topic.split(\"/\")[0],\n    \"kg\": msg.payload,\n}\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\"\n}\n\nif (global.get(\"datataking\"))\n    return msg\nreturn null\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 600,
+        "wires": [
+            [
+                "45747f690e4fc56d"
+            ]
+        ]
+    },
+    {
+        "id": "45747f690e4fc56d",
+        "type": "http request",
+        "z": "8e4367428f760b3f",
+        "name": "POST /scale/log/",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "web:8000/scale/log/",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 1010,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "43ea80891fec1b57",
+        "type": "function",
+        "z": "8e4367428f760b3f",
+        "name": "Convert to POST",
+        "func": "msg.payload = {\n    \"topic\": msg.topic,\n    \"payload\": msg.payload,\n}\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\"\n}\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 420,
+        "wires": [
+            [
+                "02f74af70205d004"
             ]
         ]
     },
@@ -295,7 +603,7 @@
         "type": "mqtt in",
         "z": "e4a222995601d487",
         "name": "saufhaengerle unlock listener",
-        "topic": "cmdn/saufhaengerle/unlock",
+        "topic": "cmnd/saufhaengerle/unlock",
         "qos": "2",
         "datatype": "auto",
         "broker": "4b090ccffa9969da",
@@ -309,7 +617,9 @@
             [
                 "4c2a27672e471cab",
                 "d0545dba65b9826a",
-                "fc6543985ef41773"
+                "fc6543985ef41773",
+                "60a806bbee172e89",
+                "40ce04d2eb219cf1"
             ]
         ]
     },
@@ -359,8 +669,7 @@
                 "d07951a406239154",
                 "5d6fce5b78eac6d1",
                 "6adc2167e9fe962b",
-                "c4257eb2395fcbfa",
-                "60a806bbee172e89"
+                "c4257eb2395fcbfa"
             ]
         ]
     },
@@ -454,25 +763,6 @@
         "wires": []
     },
     {
-        "id": "83385906bce53d4d",
-        "type": "inject",
-        "z": "e4a222995601d487",
-        "name": "Unlock valves",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 810,
-        "y": 900,
-        "wires": [
-            [
-                "fc6543985ef41773"
-            ]
-        ]
-    },
-    {
         "id": "c60681d06ae54f68",
         "type": "comment",
         "z": "e4a222995601d487",
@@ -481,25 +771,6 @@
         "x": 790,
         "y": 840,
         "wires": []
-    },
-    {
-        "id": "5e528a21ebce142c",
-        "type": "inject",
-        "z": "e4a222995601d487",
-        "name": "Lock valves",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 810,
-        "y": 940,
-        "wires": [
-            [
-                "c460bc865939cfbc"
-            ]
-        ]
     },
     {
         "id": "c460bc865939cfbc",
@@ -516,8 +787,44 @@
         "expiry": "",
         "broker": "4b090ccffa9969da",
         "x": 1510,
-        "y": 920,
+        "y": 940,
         "wires": []
+    },
+    {
+        "id": "83385906bce53d4d",
+        "type": "inject",
+        "z": "e4a222995601d487",
+        "name": "Unlock valves",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 810,
+        "y": 880,
+        "wires": [
+            [
+                "fc6543985ef41773"
+            ]
+        ]
+    },
+    {
+        "id": "40ce04d2eb219cf1",
+        "type": "function",
+        "z": "e4a222995601d487",
+        "name": "set global variables",
+        "func": "global.set(\"datataking\", true);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 400,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "b5473a8135357066",
@@ -531,7 +838,7 @@
         "finalize": "",
         "libs": [],
         "x": 600,
-        "y": 120,
+        "y": 160,
         "wires": [
             [
                 "a857415cf94fa1a7",
@@ -559,7 +866,7 @@
         "to": "",
         "reg": false,
         "x": 940,
-        "y": 240,
+        "y": 280,
         "wires": [
             []
         ]
@@ -579,7 +886,7 @@
         "expiry": "",
         "broker": "4b090ccffa9969da",
         "x": 960,
-        "y": 60,
+        "y": 100,
         "wires": []
     },
     {
@@ -597,7 +904,7 @@
         "expiry": "",
         "broker": "4b090ccffa9969da",
         "x": 960,
-        "y": 180,
+        "y": 220,
         "wires": []
     },
     {
@@ -615,7 +922,7 @@
         "expiry": "",
         "broker": "4b090ccffa9969da",
         "x": 960,
-        "y": 100,
+        "y": 140,
         "wires": []
     },
     {
@@ -633,7 +940,7 @@
         "expiry": "",
         "broker": "4b090ccffa9969da",
         "x": 960,
-        "y": 140,
+        "y": 180,
         "wires": []
     },
     {
@@ -650,12 +957,14 @@
         "rh": 0,
         "inputs": 0,
         "x": 230,
-        "y": 120,
+        "y": 160,
         "wires": [
             [
                 "b5473a8135357066",
                 "8096300f57e6f7b7",
-                "14d6b1803b65ef1a"
+                "14d6b1803b65ef1a",
+                "f7dbef2d966ca89b",
+                "f5ee756b6805f720"
             ]
         ]
     },
@@ -666,9 +975,15 @@
         "name": "",
         "method": "GET",
         "ret": "txt",
+        "paytoqs": "ignore",
         "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
         "x": 790,
-        "y": 360,
+        "y": 400,
         "wires": [
             [
                 "75444cb06727b6b5"
@@ -684,7 +999,7 @@
         "console": "false",
         "complete": "false",
         "x": 990,
-        "y": 360,
+        "y": 400,
         "wires": []
     },
     {
@@ -699,7 +1014,7 @@
         "finalize": "",
         "libs": [],
         "x": 590,
-        "y": 360,
+        "y": 400,
         "wires": [
             [
                 "4af964c0642263d3"
@@ -713,7 +1028,7 @@
         "name": "Fancy text-to-speech shit",
         "info": "",
         "x": 630,
-        "y": 300,
+        "y": 340,
         "wires": []
     },
     {
@@ -723,7 +1038,7 @@
         "name": "Valve lock",
         "info": "",
         "x": 580,
-        "y": 60,
+        "y": 100,
         "wires": []
     },
     {
@@ -733,8 +1048,148 @@
         "name": "LED idle",
         "info": "",
         "x": 580,
-        "y": 200,
+        "y": 240,
         "wires": []
+    },
+    {
+        "id": "e5ad1eea1d6b0972",
+        "type": "http request",
+        "z": "49397d274024567e",
+        "name": "GET web:8000/actions/evaluate/",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "web:8000/actions/evaluate/",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 800,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cae05ff480f892ee",
+        "type": "comment",
+        "z": "49397d274024567e",
+        "name": "Trigger the evaluation",
+        "info": "",
+        "x": 620,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "b12689feafcf31c0",
+        "type": "inject",
+        "z": "49397d274024567e",
+        "name": "Lock valves",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "fingerprint_out",
+        "payload": "OFF",
+        "payloadType": "str",
+        "x": 270,
+        "y": 120,
+        "wires": [
+            [
+                "b5473a8135357066"
+            ]
+        ]
+    },
+    {
+        "id": "36d43bbb31197aab",
+        "type": "inject",
+        "z": "49397d274024567e",
+        "name": "",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "cmnd/saufhaengerle/lock",
+        "payload": "Andi | LEFT_INDEX",
+        "payloadType": "str",
+        "x": 250,
+        "y": 220,
+        "wires": [
+            [
+                "b5473a8135357066",
+                "14d6b1803b65ef1a",
+                "f7dbef2d966ca89b"
+            ]
+        ]
+    },
+    {
+        "id": "f7dbef2d966ca89b",
+        "type": "delay",
+        "z": "49397d274024567e",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 580,
+        "y": 520,
+        "wires": [
+            [
+                "e5ad1eea1d6b0972"
+            ]
+        ]
+    },
+    {
+        "id": "ca776da19e2ae81c",
+        "type": "comment",
+        "z": "49397d274024567e",
+        "name": "Delay required - wait for LOCK event",
+        "info": "",
+        "x": 880,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "f5ee756b6805f720",
+        "type": "function",
+        "z": "49397d274024567e",
+        "name": "set global variables",
+        "func": "global.set(\"datataking\", false);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 40,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "fb5a7343e555aca3",
@@ -793,5 +1248,753 @@
         "x": 620,
         "y": 60,
         "wires": []
+    },
+    {
+        "id": "557254a1dc4e4f9e",
+        "type": "inject",
+        "z": "4b95a46b62b61483",
+        "name": "GET IPs",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "4632e96c160d9749"
+            ]
+        ]
+    },
+    {
+        "id": "4632e96c160d9749",
+        "type": "change",
+        "z": "4b95a46b62b61483",
+        "name": "IP",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "IP",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 140,
+        "wires": [
+            [
+                "b46c03bd34590c6c"
+            ]
+        ]
+    },
+    {
+        "id": "c95964459dd84440",
+        "type": "mqtt out",
+        "z": "4b95a46b62b61483",
+        "name": "",
+        "topic": "scale1/in",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 960,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "880bb06283df230a",
+        "type": "mqtt out",
+        "z": "4b95a46b62b61483",
+        "name": "",
+        "topic": "scale2/in",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 960,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "42ae03a72f56a184",
+        "type": "mqtt out",
+        "z": "4b95a46b62b61483",
+        "name": "",
+        "topic": "scale3/in",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 960,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "5e15ad42739b14ee",
+        "type": "mqtt out",
+        "z": "4b95a46b62b61483",
+        "name": "",
+        "topic": "scale4/in",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 960,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a2efc34ea0604db7",
+        "type": "inject",
+        "z": "4b95a46b62b61483",
+        "name": "NREADS",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 200,
+        "wires": [
+            [
+                "2c2925ac0b53ea02"
+            ]
+        ]
+    },
+    {
+        "id": "2c2925ac0b53ea02",
+        "type": "change",
+        "z": "4b95a46b62b61483",
+        "name": "NREADS N",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "NREADS 12",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 200,
+        "wires": [
+            [
+                "b46c03bd34590c6c"
+            ]
+        ]
+    },
+    {
+        "id": "b46c03bd34590c6c",
+        "type": "split",
+        "z": "4b95a46b62b61483",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 610,
+        "y": 200,
+        "wires": [
+            [
+                "5e15ad42739b14ee",
+                "42ae03a72f56a184",
+                "880bb06283df230a",
+                "c95964459dd84440"
+            ]
+        ]
+    },
+    {
+        "id": "199a5ea1eb45e50f",
+        "type": "inject",
+        "z": "4b95a46b62b61483",
+        "name": "TARE ALL",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 260,
+        "wires": [
+            [
+                "a79933b9fb41c476"
+            ]
+        ]
+    },
+    {
+        "id": "a79933b9fb41c476",
+        "type": "change",
+        "z": "4b95a46b62b61483",
+        "name": "TARE",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "TARE",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 260,
+        "wires": [
+            [
+                "b46c03bd34590c6c"
+            ]
+        ]
+    },
+    {
+        "id": "25db264c7efc8484",
+        "type": "inject",
+        "z": "4b95a46b62b61483",
+        "name": "TARE 1",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 320,
+        "wires": [
+            [
+                "adb1f18a0822f06c"
+            ]
+        ]
+    },
+    {
+        "id": "adb1f18a0822f06c",
+        "type": "change",
+        "z": "4b95a46b62b61483",
+        "name": "TARE",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "TARE",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 320,
+        "wires": [
+            [
+                "c95964459dd84440"
+            ]
+        ]
+    },
+    {
+        "id": "0ca07da0f47a5dd6",
+        "type": "inject",
+        "z": "4b95a46b62b61483",
+        "name": "TARE 2",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 380,
+        "wires": [
+            [
+                "bf02a3dd4d7d2be6"
+            ]
+        ]
+    },
+    {
+        "id": "bf02a3dd4d7d2be6",
+        "type": "change",
+        "z": "4b95a46b62b61483",
+        "name": "TARE",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "TARE",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 380,
+        "wires": [
+            [
+                "880bb06283df230a"
+            ]
+        ]
+    },
+    {
+        "id": "aa68a44cbcb857a1",
+        "type": "inject",
+        "z": "4b95a46b62b61483",
+        "name": "TARE 3",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 440,
+        "wires": [
+            [
+                "e55d26822def7abc"
+            ]
+        ]
+    },
+    {
+        "id": "e55d26822def7abc",
+        "type": "change",
+        "z": "4b95a46b62b61483",
+        "name": "TARE",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "TARE",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 440,
+        "wires": [
+            [
+                "42ae03a72f56a184"
+            ]
+        ]
+    },
+    {
+        "id": "391c23aa99caffc6",
+        "type": "inject",
+        "z": "4b95a46b62b61483",
+        "name": "TARE 4",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 500,
+        "wires": [
+            [
+                "4ce55a05e2f233c9"
+            ]
+        ]
+    },
+    {
+        "id": "4ce55a05e2f233c9",
+        "type": "change",
+        "z": "4b95a46b62b61483",
+        "name": "TARE",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "TARE",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 500,
+        "wires": [
+            [
+                "5e15ad42739b14ee"
+            ]
+        ]
+    },
+    {
+        "id": "794ec1f80a70510f",
+        "type": "mqtt out",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "",
+        "topic": "fingerprint_in",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 890,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "ede4e5aad23765dc",
+        "type": "inject",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "RESET",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 240,
+        "wires": [
+            [
+                "0ee9f0b6e73c5e22"
+            ]
+        ]
+    },
+    {
+        "id": "0ee9f0b6e73c5e22",
+        "type": "change",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "RESET",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "RESET",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 240,
+        "wires": [
+            [
+                "794ec1f80a70510f"
+            ]
+        ]
+    },
+    {
+        "id": "ed1de31574e74209",
+        "type": "inject",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "DELETE",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 300,
+        "wires": [
+            [
+                "571a6125e91ac063"
+            ]
+        ]
+    },
+    {
+        "id": "571a6125e91ac063",
+        "type": "change",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "DELETE TEMPLATE",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "DELETE 300",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 300,
+        "wires": [
+            [
+                "794ec1f80a70510f"
+            ]
+        ]
+    },
+    {
+        "id": "bebcbc18ec6bf921",
+        "type": "inject",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "CLEAR",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 360,
+        "wires": [
+            [
+                "6766ac88a3d170ea"
+            ]
+        ]
+    },
+    {
+        "id": "6766ac88a3d170ea",
+        "type": "change",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "CLEAR ALL TEMPLATES",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "CLEAR",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 360,
+        "wires": [
+            [
+                "794ec1f80a70510f"
+            ]
+        ]
+    },
+    {
+        "id": "fc94e5620bb72f8e",
+        "type": "inject",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "COUNT",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 420,
+        "wires": [
+            [
+                "83477fbc692d0c35"
+            ]
+        ]
+    },
+    {
+        "id": "83477fbc692d0c35",
+        "type": "change",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "COUNT TEMPLATES",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "COUNT",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 420,
+        "wires": [
+            [
+                "794ec1f80a70510f"
+            ]
+        ]
+    },
+    {
+        "id": "3df2cec22b726ede",
+        "type": "inject",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "PARAMS",
+        "props": [{
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 480,
+        "wires": [
+            [
+                "946514dd679ed23f"
+            ]
+        ]
+    },
+    {
+        "id": "946514dd679ed23f",
+        "type": "change",
+        "z": "aaa6e7e0da3b92f0",
+        "name": "PARAMS",
+        "rules": [{
+            "t": "set",
+            "p": "payload",
+            "pt": "msg",
+            "to": "PARAMS",
+            "tot": "str"
+        }],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 480,
+        "wires": [
+            [
+                "794ec1f80a70510f"
+            ]
+        ]
     }
 ]
