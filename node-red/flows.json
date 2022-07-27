@@ -24,7 +24,7 @@
     {
         "id": "9b2805f167ce2c8f",
         "type": "tab",
-        "label": "Scale",
+        "label": "Scale calibration",
         "disabled": false,
         "info": "",
         "env": []
@@ -80,7 +80,7 @@
         "y": 100,
         "wires": [
             [
-                "b8c773ec1966d935"
+                "a89e53c0cbb3b55a"
             ]
         ]
     },
@@ -98,7 +98,7 @@
         "proxy": "",
         "authType": "",
         "senderr": false,
-        "x": 850,
+        "x": 990,
         "y": 100,
         "wires": [
             []
@@ -115,7 +115,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 590,
+        "x": 730,
         "y": 100,
         "wires": [
             [
@@ -147,7 +147,7 @@
         "y": 60,
         "wires": [
             [
-                "b8c773ec1966d935"
+                "a89e53c0cbb3b55a"
             ]
         ]
     },
@@ -160,6 +160,25 @@
         "x": 630,
         "y": 60,
         "wires": []
+    },
+    {
+        "id": "a89e53c0cbb3b55a",
+        "type": "function",
+        "z": "8e4367428f760b3f",
+        "name": "filter",
+        "func": "const forwarded_topics = [\n    \"fingerprint_debug\",\n    \"fingerprint_out\",\n    \"scale1/out/kg\",\n    \"scale2/out/kg\",\n    \"scale3/out/kg\",\n    \"scale4/out/kg\",\n]\n\nif (forwarded_topics.indexOf(msg.topic) > -1)\n    return msg\nelse\n    return null\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 100,
+        "wires": [
+            [
+                "b8c773ec1966d935"
+            ]
+        ]
     },
     {
         "id": "4c2a27672e471cab",
@@ -715,6 +734,64 @@
         "info": "",
         "x": 580,
         "y": 200,
+        "wires": []
+    },
+    {
+        "id": "fb5a7343e555aca3",
+        "type": "mqtt in",
+        "z": "9b2805f167ce2c8f",
+        "name": "",
+        "topic": "scale1/out/raw",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "4b090ccffa9969da",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 60,
+        "wires": [
+            [
+                "7ee711cfbd6c94f4"
+            ]
+        ]
+    },
+    {
+        "id": "7ee711cfbd6c94f4",
+        "type": "function",
+        "z": "9b2805f167ce2c8f",
+        "name": "scale1 calibration",
+        "func": "msg.payload = 0.044 * msg.payload  - 71309.794\nmsg.payload /= 1000.0\nmsg.payload = msg.payload.toFixed(3)\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 60,
+        "wires": [
+            [
+                "53e60b710c434a4b"
+            ]
+        ]
+    },
+    {
+        "id": "53e60b710c434a4b",
+        "type": "mqtt out",
+        "z": "9b2805f167ce2c8f",
+        "name": "",
+        "topic": "scale1/out/kg",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "4b090ccffa9969da",
+        "x": 620,
+        "y": 60,
         "wires": []
     }
 ]
