@@ -19,6 +19,7 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("mqtt/", include("mqtt.urls")),
+    path("actions/", include("actions.urls")),
     path("fingerprints/", include("fingerprints.urls")),
     path("unicorn/", include("django_unicorn.urls")),
 ]

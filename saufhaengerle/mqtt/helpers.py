@@ -56,7 +56,10 @@ def send_unlock_if_authorized(message: Message) -> bool:
 
 
 def create_lock_event() -> bool:
-    last_unlock: Event = Event.objects.filter(event_type=EventType.UNLOCK).last()  # type: ignore
-    Event.objects.create(event_type=EventType.LOCK, initiator=last_unlock.initiator)  # type: ignore
+    last_unlock = Event.objects.filter(event_type=EventType.UNLOCK).last()
+    if last_unlock is None:
+        log.error("Failed to find last_unlock")
+        return False
+    Event.objects.create(event_type=EventType.LOCK, initiator=last_unlock.initiator)
 
     return True
