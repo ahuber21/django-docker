@@ -58,13 +58,18 @@ def evaluate(*_: Any) -> HttpResponse:
         log.error("Failed to get first / last measurements")
         return HttpResponse(status=500)
 
+    scale = max_diff.start_measurement.scale if max_diff.start_measurement else None
+    product = scale.product if scale else None
+
     Tap.objects.create(
         user=last_unlock.initiator,
         unlock=last_unlock,
         lock=last_lock,
         start_measurement=max_diff.start_measurement,
         stop_measurement=max_diff.stop_measurement,
+        scale=scale,
         quantity_ml=(1000.0 * max_diff.diff),
+        product_name=product,
     )
 
     return HttpResponse(status=200)

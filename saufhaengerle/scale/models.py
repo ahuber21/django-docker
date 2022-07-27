@@ -3,6 +3,7 @@ from django.db import models
 
 class Scale(models.Model):
     name = models.CharField(max_length=100, db_index=True)
+    product = models.CharField(max_length=100, default="Bier")
 
     def __str__(self) -> str:
         return self.name

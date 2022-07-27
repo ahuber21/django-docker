@@ -5,7 +5,7 @@ from .models import Measurement, Scale
 
 @admin.register(Scale)
 class ScaleAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("name", "product")
 
 
 @admin.register(Measurement)
