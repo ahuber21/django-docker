@@ -21,5 +21,6 @@ urlpatterns = [
     path("mqtt/", include("mqtt.urls")),
     path("actions/", include("actions.urls")),
     path("fingerprints/", include("fingerprints.urls")),
+    path("scale/", include("scale.urls")),
     path("unicorn/", include("django_unicorn.urls")),
 ]

@@ -5,4 +5,4 @@ from .models import Fingerprint
 
 @admin.register(Fingerprint)
 class FingerprintAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("template_id", "owner", "finger_type")

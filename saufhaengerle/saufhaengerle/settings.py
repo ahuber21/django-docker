@@ -59,7 +59,9 @@ INSTALLED_APPS = [
     "actions",
     "fingerprints",
     "mqtt",
+    "scale",
     "users",
+    "taps",
 ]
 
 MIDDLEWARE = [
